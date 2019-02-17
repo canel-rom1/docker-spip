@@ -1,0 +1,59 @@
+version: '3.4'
+services:
+  site:
+    image: ipeos/spip:latest
+    depends_on:
+      - db
+    #restart: always
+    networks:
+      - lan
+      - wan
+    ports:
+      - "80:80"
+    volumes:
+      - squelettes:/var/www/html/squelettes
+    environment:
+      SPIP_DB_HOST: "db"
+      SPIP_DB_NAME: "spipdb"
+      SPIP_DB_LOGIN: "spip"
+      SPIP_DB_PASS: "spippass"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 0s
+
+  db:
+    image: mariadb:latest
+    #restart: always
+    networks:
+      - lan
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpass"
+      MYSQL_DATABASE: "spipdb"
+      MYSQL_USER: "spip"
+      MYSQL_PASSWORD: "spippass"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 1m
+      timeout: 30s
+      retries: 3
+      start_period: 0s
+
+volumes:
+  db:
+    driver: local
+  squelettes:
+    driver: local
+
+networks:
+  lan:
+    driver: bridge
+  wan:
+    driver: bridge
+
+
+# vim: ft=yaml tw=80 et ts=2 sw=2 sts=2
