@@ -11,8 +11,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - squelettes:/var/www/html/squelettes
       - mediatheque:/var/www/html/IMG
+      - plugins:/var/www/html/plugins
+      - squelettes:/var/www/html/squelettes
     environment:
       SPIP_DB_HOST: "db"
       SPIP_DB_NAME: "spipdb"
@@ -48,6 +49,8 @@ volumes:
   db:
     driver: local
   mediatheque:
+    driver: local
+  plugins:
     driver: local
   squelettes:
     driver: local
