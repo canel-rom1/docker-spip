@@ -12,6 +12,7 @@ services:
       - "80:80"
     volumes:
       - squelettes:/var/www/html/squelettes
+      - mediatheque:/var/www/html/IMG
     environment:
       SPIP_DB_HOST: "db"
       SPIP_DB_NAME: "spipdb"
@@ -45,6 +46,8 @@ services:
 
 volumes:
   db:
+    driver: local
+  mediatheque:
     driver: local
   squelettes:
     driver: local
